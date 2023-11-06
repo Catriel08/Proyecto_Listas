@@ -2,20 +2,20 @@ public class Artista {
 
     private String nombre;
     private String nacionalidad;
-    private  String fecha;
+    private  int edad;
     Artista sig;
 
-    public Artista(String nombre, String nacionalidad, String fecha) {
+    public Artista(String nombre, String nacionalidad, int edad) {
         this.nombre = nombre;
         this.nacionalidad = nacionalidad;
-        this.fecha = fecha;
+        this.edad = edad;
         this.sig = null;
     }
 
     public Artista() {
         this.nombre = "";
         this.nacionalidad = "";
-        this.fecha = "";
+        this.edad = 0;
         this.sig = null;
     }
 
@@ -35,12 +35,12 @@ public class Artista {
         this.nacionalidad = nacionalidad;
     }
 
-    public String getFecha() {
-        return fecha;
+    public int getEdad() {
+        return edad;
     }
 
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
+    public void setEdad(int edad) {
+        this.edad = edad;
     }
 
     public Artista getSig() {
@@ -56,7 +56,7 @@ public class Artista {
         return "Artista{" +
                 "nombre='" + nombre + '\'' +
                 ", nacionalidad='" + nacionalidad + '\'' +
-                ", fecha='" + fecha + '\'' +
+                ", edad='" + edad + '\'' +
                 ", sig=" + sig +
                 '}';
     }
