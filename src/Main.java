@@ -72,18 +72,16 @@ public class Main {
         System.out.println("4. Modificar listas simples");
         System.out.println("5. Imprimir listas simples");
         System.out.println("6. Imprimir listas simples impares");
-        System.out.println("-------------------------------------");
-        System.out.println("7. Mostrar número de artistas");
-        System.out.println("8. Mostrar artista joven y viejo");
-        System.out.println("9. Volver.");
+        System.out.println("7. Reportes listas simples");
+        System.out.println("8. Volver.");
 
-        System.out.println("");
-        System.out.println("Escoja una opcion: ");
+        System.out.println("\nEscoja una opcion: ");
         opc = Integer.parseInt(leer.nextLine());
 
         switch (opc) {
             case 1:
-                crearListasSimples();
+                //crearListasSimples();
+                cargarArtistasTxt();
                 menuListasSimples();
                 break;
 
@@ -103,57 +101,24 @@ public class Main {
                 break;
 
             case 5:
-                //imprimirListasSimplesTxt();
                 imprimirListasSimples();
                 menuListasSimples();
                 break;
             case 6:
                 imprimirArtistasImpares();
                 menuListasSimples();
-
             case 7:
-                numeroArtistas();
+                menuReportesListasSimples();
                 menuListasSimples();
+                break;
 
             case 8:
-                artistaJovenViejo();
-                menuListasSimples();
-
-            case 9:
                 menuPrincipal();
                 break;
 
             default:
                 menuListasSimples();
         }
-    }
-
-    public void numeroArtistas()
-    {
-        numeroArtistas=0;
-
-        p=cab;
-        while (p!=null)
-        {
-            p=p.sig;
-            numeroArtistas++;
-        }
-        System.out.println("El número de artistas es de: " + numeroArtistas);
-    }
-
-    public void artistaJovenViejo()
-    {
-        /*for (int i = terremotos.size(); i > 0; i--) {
-            for (int j = 0; j < i - 1; j++) {
-                Terremoto p1 = (Terremoto) terremotos.get(j);
-                Terremoto p2 = (Terremoto) terremotos.get(j + 1);
-
-                if (p1.getNumero_muertos() > p2.getNumero_muertos()) {
-                    terremotos.set(j, p2);
-                    terremotos.set(j + 1, p1);
-                }
-            }
-        }*/
     }
 
     public void crearListasSimples()
@@ -174,7 +139,11 @@ public class Main {
         p.sig=q;
         p=q;
 
-        q = new Artista("Brayan","Colombia",19);
+        q = new Artista("Brayan","colombiano",19);
+        p.sig=q;
+        p=q;
+
+        q = new Artista("Dylan","colombiano",75);
         p.sig=q;
         p=q;
 
@@ -220,62 +189,185 @@ public class Main {
 
     }
 
-    public void imprimirListasSimplesTxt()
-    {
-        Artista cab = null;
-        Artista p = null;
+    public void cargarArtistasTxt() {
 
-        // Cargar información desde el archivo de texto
-        try (BufferedReader reader = new BufferedReader(new FileReader(cargar))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String nombre = line;
-                String nacionalidad = reader.readLine();
-                int edad = Integer.parseInt(reader.readLine().substring(6).trim()); // Extraer el valor numérico después de "Edad: "
+        int cont;
+        String nombre;
+        String nacionalidad;
+        int edad;
+        String linea = " ";
+        int contadorListas = 1;
 
-                Artista q = new Artista(nombre, nacionalidad, edad);
+        try {
+            FileReader reader = new FileReader(cargar);
+            BufferedReader bufer = new BufferedReader(reader);
 
-                if (cab == null) {
+            linea = bufer.readLine();
+            System.out.println(linea);
+            cont = Integer.parseInt(linea);
+
+            for (int i = 0; i < cont; i++) {
+                nombre = bufer.readLine();
+                nacionalidad = bufer.readLine();
+                edad = Integer.parseInt(bufer.readLine());
+
+                q = new Artista(nombre, nacionalidad, edad);
+
+                if (contadorListas == 1) {
                     cab = q;
-                    p = cab;
+                    p = q;
+                    contadorListas = 2;
                 } else {
                     p.sig = q;
                     p = q;
                 }
             }
-            System.out.println("Lista de artistas cargada desde el archivo correctamente.");
-            System.out.println("");
-        } catch (IOException | NumberFormatException e) {
-            System.err.println("Error al leer el archivo: " + e.getMessage());
+            System.out.println("La información se ha cargado correctamente desde el archivo.");
+
+        } catch (FileNotFoundException e) {
+            System.out.println("Error: Archivo no encontrado.");
+
+        } catch (IOException e) {
+            System.out.println("Error: Problema de lectura del archivo.");
+
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Formato incorrecto en el archivo.");
+        }
+    }
+
+    public void menuReportesListasSimples()
+    {
+        int opc;
+
+        System.out.println("\nMENÚ REPORTES LISTAS SIMPLES");
+        System.out.println("1. Mostrar número de artistas");
+        System.out.println("2. Encontrar artista por caracter alfabético");
+        System.out.println("3. Mostrar artista joven y viejo");
+        System.out.println("4. Mostrar artistas por nacionalidad (colombiano)");
+        System.out.println("5. Volver");
+
+        System.out.println("\nEscoja una opción");
+        opc = Integer.parseInt(leer.nextLine());
+
+        switch (opc){
+            case 1:
+                numeroArtistas();
+                menuReportesListasSimples();
+                break;
+            case 2:
+                encontrarArtistaPorCaracterAlfabetico();
+                menuReportesListasSimples();
+                break;
+            case 3:
+                artistaJovenYViejo();
+                menuReportesListasSimples();
+                break;
+            case 4:
+                mostrarArtistasPorNacionalidadColombiana();
+                menuReportesListasSimples();
+                break;
+            case 5:
+                menuListasSimples();
+                break;
+            default:
+                menuReportesListasSimples();
+                break;
+        }
+    }
+
+    public void numeroArtistas()
+    {
+        numeroArtistas=0;
+
+        p=cab;
+        while (p!=null)
+        {
+            p=p.sig;
+            numeroArtistas++;
+        }
+        System.out.println("El número de artistas es de: " + numeroArtistas);
+    }
+
+    public void encontrarArtistaPorCaracterAlfabetico()
+    {
+        if (cab == null) {
+            System.out.println("La lista está vacía.");
+            return;
         }
 
-        // Imprimir la lista cargada
+        String caracterAlfabetico;
         p = cab;
+
+        System.out.println("Ingrese la letra por la cual desea buscar los nombres");
+        caracterAlfabetico = leer.nextLine().toUpperCase(); // Convertir a mayúsculas para hacer la comparación insensible a mayúsculas/minúsculas
+
         while (p != null) {
-            System.out.println(p.getNombre());
-            System.out.println(p.getNacionalidad());
-            System.out.println(p.getEdad());
-            System.out.println("");
+            if (Character.toUpperCase(caracterAlfabetico.charAt(0)) == Character.toUpperCase(p.getNombre().charAt(0))) {
+                System.out.println(p.toString());
+            }
             p = p.sig;
         }
     }
 
-    public void guardarListasSimplesTxt()
+    public void artistaJovenYViejo()
     {
-        /*try (PrintWriter writer = new PrintWriter(cargar)) {
-            p = cab;
+        if (cab == null) {
+            System.out.println("La lista está vacía.");
+            return;
+        }
 
-            while (p != null) {
-                writer.println("Nombre: " + p.getNombre());
-                writer.println("Nacionalidad: " + p.getNacionalidad());
-                writer.println("Edad: " + p.getEdad());
-                p = p.sig;
+        p = cab;
+        Artista artistaJoven = p;
+        Artista artistaViejo = p;
+
+        while (p != null) {
+            if (p.getEdad() < artistaJoven.getEdad()) {
+                artistaJoven = p;
             }
 
-            System.out.println("Lista de artistas guardada en el archivo correctamente.");
-        } catch (IOException e) {
-            System.err.println("Error al escribir en el archivo: " + e.getMessage());
-        }*/
+            if (p.getEdad() > artistaViejo.getEdad()) {
+                artistaViejo = p;
+            }
+
+            p = p.sig;
+        }
+
+        System.out.println("\nARTISTA MÁS JOVEN:");
+        System.out.println("Nombre: " + artistaJoven.getNombre());
+        System.out.println("Edad: " + artistaJoven.getEdad());
+        System.out.println("Nacionalidad: " + artistaJoven.getNacionalidad());
+        System.out.println("");
+
+        System.out.println("\nARTISTA MÁS VIEJO:");
+        System.out.println("Nombre: " + artistaViejo.getNombre());
+        System.out.println("Edad: " + artistaViejo.getEdad());
+        System.out.println("Nacionalidad: " + artistaViejo.getNacionalidad());
+    }
+
+    public void mostrarArtistasPorNacionalidadColombiana()
+    {
+        if (cab == null) {
+            System.out.println("La lista está vacía.");
+            return;
+        }
+
+        p = cab;
+        boolean encontrados = false;
+
+        while (p != null) {
+            if (p.getNacionalidad().compareToIgnoreCase("colombiano")==0) {
+                System.out.println("\nNombre: " + p.getNombre());
+                System.out.println("Nacionalidad: " + p.getNacionalidad());
+                System.out.println("Edad: " + p.getEdad());
+                encontrados = true;
+            }
+            p = p.sig;
+        }
+
+        if (!encontrados) {
+            System.out.println("No hay artistas con nacionalidad colombiana/o en la lista.");
+        }
+
     }
 
     public void menuAdicionarListasSimples()
@@ -284,7 +376,7 @@ public class Main {
         System.out.println("\nMENU ADICIONAR LISTAS SIMPLES");
         System.out.println("1. Adicionar por el inicio listas simples.");
         System.out.println("2. Adicionar por el fin listas simples.");
-        System.out.println("3. Adicionar anteriores de nodo listas simples");
+        System.out.println("3. Adicionar antes de nodo listas simples");
         System.out.println("4. Adicionar despues de nodo listas simples");
         System.out.println("5. Volver.");
 
@@ -303,7 +395,7 @@ public class Main {
                 break;
 
             case 3:
-                adicionaranterioresListasSimples();
+                adicionarAntesListasSimples();
                 menuAdicionarListasSimples();
                 break;
 
@@ -326,11 +418,13 @@ public class Main {
     {
         String nombre, nacimiento;
         int edad;
-        System.out.println("Digite el nombre del artista ");
+        System.out.println("Digite el nombre del artista: ");
         nombre=leer.nextLine();
-        System.out.println("Digite la nacionalidad del artista ");
+
+        System.out.println("Digite la nacionalidad del artista: ");
         nacimiento=leer.nextLine();
-        System.out.println("Digite edad del artista ");
+
+        System.out.println("Digite edad del artista: ");
         edad = Integer.parseInt(leer.nextLine());
 
         q=new Artista(nombre,nacimiento, edad);
@@ -342,11 +436,11 @@ public class Main {
     {
         String nombre, nacimiento;
         int edad;
-        System.out.println("Digite el nombre del artista ");
+        System.out.println("Digite el nombre del artista: ");
         nombre=leer.nextLine();
-        System.out.println("Digite la nacionalidad del artista ");
+        System.out.println("Digite la nacionalidad del artista: ");
         nacimiento=leer.nextLine();
-        System.out.println("Digite la edad del artista ");
+        System.out.println("Digite la edad del artista: ");
         edad = Integer.parseInt(leer.nextLine());
 
         q=new Artista(nombre,nacimiento, edad);
@@ -356,7 +450,7 @@ public class Main {
         p.sig=q;
     }
 
-    public void adicionaranterioresListasSimples()
+    public void adicionarAntesListasSimples()
     {
         Artista m;
         String nombre, nacimiento;
@@ -364,7 +458,7 @@ public class Main {
         String dato;
 
         p=cab;
-        System.out.println("Digite el nombre a buscar ");
+        System.out.println("Digite el nombre a buscar para adicionar antes del mismo ");
         dato=leer.nextLine();
         if(p.getNombre().compareToIgnoreCase(dato)==0)
         {
@@ -373,11 +467,11 @@ public class Main {
         else
         {
 
-            System.out.println("Digite el nombre del artista ");
-            nombre=leer.nextLine().toUpperCase();
-            System.out.println("Digite la nacionalidad del artista ");
-            nacimiento=leer.nextLine().toUpperCase();
-            System.out.println("Digite fecha nacimientoe del artista ");
+            System.out.println("Digite el nombre del artista: ");
+            nombre=leer.nextLine();
+            System.out.println("Digite la nacionalidad del artista: ");
+            nacimiento=leer.nextLine();
+            System.out.println("Digite fecha nacimientoe del artista: ");
             edad = Integer.parseInt(leer.nextLine());
 
             q=new Artista(nombre,nacimiento, edad);
@@ -408,7 +502,7 @@ public class Main {
         String dato;
 
         p = cab;
-        System.out.println("Digite el nombre a buscar: ");
+        System.out.println("Digite el nombre a buscar para adicionar despues del mismo: ");
         dato = leer.nextLine();
 
         System.out.println("Digite el nombre del artista a agregar: ");
@@ -440,7 +534,7 @@ public class Main {
         System.out.println("\nMENU ELIMINAR LISTAS SIMPLES");
         System.out.println("1. Eliminar por el inicio listas simples.");
         System.out.println("2. Eliminar por el fin listas simples.");
-        System.out.println("3. Eliminar anteriores de nodo listas simples");
+        System.out.println("3. Eliminar antes de nodo listas simples");
         System.out.println("4. Eliminar despues de nodo listas simples");
         System.out.println("5. Eliminar nodo dado listas simples.");
         System.out.println("6. Volver.");
@@ -460,7 +554,7 @@ public class Main {
                 break;
 
             case 3:
-                eliminarAnterioresListasSimples();
+                eliminarAntesListasSimples();
                 menuEliminarListasSimples();
                 break;
 
@@ -511,7 +605,7 @@ public class Main {
         }
     }
 
-    public void eliminarAnterioresListasSimples()
+    public void eliminarAntesListasSimples()
     {
         String dato;
         Artista nodoAnterior = null;
@@ -563,7 +657,7 @@ public class Main {
         if (cab == null || cab.sig == null) {
             System.out.println("No se puede eliminar después, la lista está vacía o tiene un solo elemento.");
         } else {
-            System.out.println("Digite el nombre del nodo después del cual desea eliminar: ");
+            System.out.println("Digite el nombre del nodo para eliminar su siguiente: ");
             String dato = leer.nextLine();
 
             Artista u = cab;
@@ -692,7 +786,8 @@ public class Main {
         System.out.println("3. Eliminar listas circulares");
         System.out.println("4. Modificar listas circulares");
         System.out.println("5. Imprimir listas circulares");
-        System.out.println("6. Volver.");
+        System.out.println("6. Reportes listas circulares");
+        System.out.println("7. Volver.");
 
         System.out.println("\nEscoja una opcion");
         valor= leer.nextLine();
@@ -722,8 +817,10 @@ public class Main {
                 imprimirListasCirculares();
                 menuListasCirculares();
                 break;
-
             case 6:
+                menuReportesListasCirculares();
+                menuListasCirculares();
+            case 7:
                 menuPrincipal();
                 break;
 
@@ -733,6 +830,7 @@ public class Main {
     }
 
     public void crearListasCirculares(){
+
         cab1 = new Perros_Calientes("Juan Delgadillo", "peruano", 78.3, 3.2,16, "adulto");
         cab1.siguiente = cab1;
         r = new Perros_Calientes("Luang Xion", "chino", 65.4, 4.6,23, "junior");
@@ -745,13 +843,229 @@ public class Main {
         r.siguiente = cab1;
 
     }
+
+    public void menuReportesListasCirculares()
+    {
+        int opc;
+
+        System.out.println("\nMENÚ REPORTES LISTAS CIRCULARES");
+        System.out.println("1. Mostrar lista de los participantes registrados según su categoria");
+        System.out.println("2. Mostrar participante que menos perros ha consumido");
+        System.out.println("3. Buscar participante por su nombre");
+        System.out.println("4. Buscar participante más veloz en toda la competencia");
+        System.out.println("5. Buscar el participante más eficiente en toda la competencia");
+        System.out.println("6. Volver");
+
+        System.out.println("\nEscoja una opción");
+        opc = Integer.parseInt(leer.nextLine());
+
+        switch (opc){
+            case 1:
+                mostrarParticipantesRegistradosSegunSuCategoria();
+                menuReportesListasCirculares();
+                break;
+            case 2:
+                mostrarParticipanteMenosPerrosConsumidos();
+                menuReportesListasCirculares();
+                break;
+            case 3:
+                buscarParticipantePorNombre();
+                menuReportesListasCirculares();
+                break;
+            case 4:
+                buscarParticipanteMasVeloz();
+                menuReportesListasCirculares();
+                break;
+            case 5:
+                buscarPartcipanteMasEficiente();
+                menuReportesListasCirculares();
+                break;
+            case 6:
+                menuListasCirculares();
+                break;
+            default:
+                menuReportesListasCirculares();
+                break;
+        }
+    }
+
+    public void mostrarParticipantesRegistradosSegunSuCategoria()
+    {
+        final String CATEGORIA_JUNIOR = "junior";
+        final String CATEGORIA_ADULTO = "adulto";
+
+        if (cab1 == null) {
+            System.out.println("La lista está vacía.");
+            return;
+        }
+
+        s = cab1;
+        boolean hayParticipantesJunior = false;
+        boolean hayParticipantesAdulto = false;
+
+        System.out.println("\nPARTICIPANTES DE CATEGORIA JUNIOR: ");
+        do {
+            if (s.getCategoria().compareToIgnoreCase(CATEGORIA_JUNIOR) == 0) {
+                System.out.println("\nNombre: " + s.getNombre());
+                System.out.println("Nacionalidad: " + s.getNacionalidad());
+                System.out.println("Peso: " + s.getPeso());
+                System.out.println("Velocidad de ingestión: " + s.getVelocidadIngestion());
+                System.out.println("Perros consumidos: " + s.getPerrosConsumidos());
+                System.out.println("Categoria: " + s.getCategoria());
+                hayParticipantesJunior = true;
+            }
+            s = s.getSiguiente();
+        } while (s != cab1);
+
+        s = cab1;
+
+        System.out.println("\nPARTICIPANTES DE CATEGORIA ADULTO: ");
+        do {
+            if (s.getCategoria().compareToIgnoreCase(CATEGORIA_ADULTO) == 0) {
+                System.out.println("\nNombre: " + s.getNombre());
+                System.out.println("Nacionalidad: " + s.getNacionalidad());
+                System.out.println("Peso: " + s.getPeso());
+                System.out.println("Velocidad de ingestión: " + s.getVelocidadIngestion());
+                System.out.println("Perros consumidos: " + s.getPerrosConsumidos());
+                System.out.println("Categoria: " + s.getCategoria());
+                hayParticipantesAdulto = true;
+            }
+            s = s.getSiguiente();
+        } while (s != cab1);
+
+        if (!hayParticipantesJunior) {
+            System.out.println("No hay participantes en la categoría Junior.");
+        }
+
+        if (!hayParticipantesAdulto) {
+            System.out.println("No hay participantes en la categoría Adulto.");
+        }
+    }
+
+
+    public void mostrarParticipanteMenosPerrosConsumidos()
+    {
+        if (cab1 == null) {
+            System.out.println("La lista está vacía.");
+            return;
+        }
+
+        s = cab1;
+        Perros_Calientes participanteMenosPerrosConsumidos = s;
+
+        while (s.getSiguiente() != cab1) {
+            s = s.getSiguiente();
+            if (s.getPerrosConsumidos() < participanteMenosPerrosConsumidos.getPerrosConsumidos()) {
+                participanteMenosPerrosConsumidos = s;
+            }
+        }
+
+        System.out.println("\nParticipante que ha consumido menos perros calientes:");
+        System.out.println("\nNombre: " + participanteMenosPerrosConsumidos.getNombre());
+        System.out.println("Nacionalidad: " + participanteMenosPerrosConsumidos.getNacionalidad());
+        System.out.println("Peso: " + participanteMenosPerrosConsumidos.getPeso());
+        System.out.println("Velocidad de ingestión: " + participanteMenosPerrosConsumidos.getVelocidadIngestion());
+        System.out.println("Perros consumidos: " + participanteMenosPerrosConsumidos.getPerrosConsumidos());
+        System.out.println("Categoría: " + participanteMenosPerrosConsumidos.getCategoria());
+    }
+
+    public void buscarParticipantePorNombre()
+    {
+        if (cab1 == null) {
+            System.out.println("La lista está vacía.");
+            return;
+        }
+
+        String dato;
+        System.out.println("Digite el nombre del participante a buscar: ");
+        dato = leer.nextLine();
+        s = cab1;
+        boolean encontrado = false;
+
+        do {
+            if (s.getNombre().compareToIgnoreCase(dato) == 0) {
+                System.out.println("\nParticipante encontrado:");
+                System.out.println("\nNombre: " + s.getNombre());
+                System.out.println("Nacionalidad: " + s.getNacionalidad());
+                System.out.println("Peso: " + s.getPeso());
+                System.out.println("Velocidad de ingestión: " + s.getVelocidadIngestion());
+                System.out.println("Perros consumidos: " + s.getPerrosConsumidos());
+                System.out.println("Categoría: " + s.getCategoria());
+                encontrado = true;
+                break;
+            }
+            s = s.getSiguiente();
+        } while (s != cab1);
+
+        if (!encontrado) {
+            System.out.println("Participante no encontrado con el nombre: " + dato);
+        }
+    }
+
+    public void buscarParticipanteMasVeloz()
+    {
+        if (cab1 == null) {
+            System.out.println("La lista está vacía.");
+            return;
+        }
+
+        s = cab1;
+        Perros_Calientes participanteMasVeloz = s;
+
+        do {
+            if (s.getPerrosConsumidos() > participanteMasVeloz.getPerrosConsumidos()) {
+                participanteMasVeloz = s;
+            }
+            s = s.getSiguiente();
+        } while (s != cab1);
+
+        System.out.println("\nParticipante más veloz:");
+        System.out.println("\nNombre: " + participanteMasVeloz.getNombre());
+        System.out.println("Nacionalidad: " + participanteMasVeloz.getNacionalidad());
+        System.out.println("Peso: " + participanteMasVeloz.getPeso());
+        System.out.println("Velocidad de ingestión: " + participanteMasVeloz.getVelocidadIngestion());
+        System.out.println("Perros consumidos: " + participanteMasVeloz.getPerrosConsumidos());
+        System.out.println("Categoría: " + participanteMasVeloz.getCategoria());
+    }
+
+    public void buscarPartcipanteMasEficiente()
+    {
+        if (cab1 == null) {
+            System.out.println("La lista está vacía.");
+            return;
+        }
+
+        final double PESO_PERROCALIENTE = 1.5; // Peso del perro caliente (constante)
+        s = cab1;
+        Perros_Calientes participanteMasEficiente = s;
+        double eficienciaMasAlta = s.getPerrosConsumidos() * PESO_PERROCALIENTE / s.getPeso();
+
+        do {
+            double eficienciaActual = s.getPerrosConsumidos() * PESO_PERROCALIENTE / s.getPeso();
+            if (eficienciaActual > eficienciaMasAlta) {
+                eficienciaMasAlta = eficienciaActual;
+                participanteMasEficiente = s;
+            }
+            s = s.getSiguiente();
+        } while (s != cab1);
+
+        System.out.println("\nParticipante más eficiente:");
+        System.out.println("\nNombre: " + participanteMasEficiente.getNombre());
+        System.out.println("Nacionalidad: " + participanteMasEficiente.getNacionalidad());
+        System.out.println("Peso: " + participanteMasEficiente.getPeso());
+        System.out.println("Velocidad de ingestión: " + participanteMasEficiente.getVelocidadIngestion());
+        System.out.println("Perros consumidos: " + participanteMasEficiente.getPerrosConsumidos());
+        System.out.println("Eficiencia: " + eficienciaMasAlta);
+        System.out.println("Categoría: " + participanteMasEficiente.getCategoria());
+    }
+
     public void menuAdicionarListasCirculares(){
         int opc;
         String valor;
         System.out.println("\nMENU ADICIONAR LISTAS CIRCULARES");
         System.out.println("1. Adicionar por el inicio listas circulares.");
         System.out.println("2. Adicionar por el fin listas circulares.");
-        System.out.println("3. Adicionar anteriores de nodo listas circulares");
+        System.out.println("3. Adicionar antes de nodo listas circulares");
         System.out.println("4. Adicionar despues de nodo listas circulares");
         System.out.println("5. Volver.");
         System.out.println("\nEscoja una opcion;");
@@ -793,21 +1107,25 @@ public class Main {
     {
 
         s = cab1;
-        r = new Perros_Calientes("Sofia Reina", "mexicana",63.0 ,5.2 ,31, "infanterioril");
+        r = new Perros_Calientes("Sofia Reina", "mexicana",63.0 ,5.2 ,31, "adulto");
         while(s.siguiente!=cab1)
             s=s.siguiente;
         r.siguiente=cab1;
         s.siguiente=r;
         cab1=r;
+
+        System.out.println("Se ha añadido correctamente un participante");
     }
     public void adicionarFinListasCirculares()
     {
         s = cab1;
-        r = new Perros_Calientes("Sofia Reina", "mexicana",63.0 ,5.2 ,31, "infanterioril");
+        r = new Perros_Calientes("Sofia Reina", "mexicana",63.0 ,5.2 ,31, "adulto");
         while(s.siguiente!=cab1)
             s=s.siguiente;
         r.siguiente=cab1;
         s.siguiente=r;
+
+        System.out.println("Se ha añadido correctamente un participante");
     }
 
     public void adicionaranterioresListasCirculares()
@@ -818,7 +1136,7 @@ public class Main {
         valor = leer.nextLine();
 
         s = cab1;
-        r = new Perros_Calientes("Sofia reina", "mexicana",63.0 ,5.2 ,31, "infanterioril");
+        r = new Perros_Calientes("Sofia reina", "mexicana",63.0 ,5.2 ,31, "adulto");
 
         if(s.getNombre().compareToIgnoreCase(valor)==0 )
         {
@@ -860,13 +1178,13 @@ public class Main {
         }
 
         if(s.getNombre().compareToIgnoreCase(valor)==0 && s.siguiente== cab1){
-            r = new Perros_Calientes("Sofia reina", "mexicana",63.0 ,5.2 ,31, "infanterioril");
+            r = new Perros_Calientes("Sofia reina", "mexicana",63.0 ,5.2 ,31, "adulto");
             s.siguiente = r;
             r.siguiente = cab1;
 
         }else {
             if(s.getNombre().compareToIgnoreCase(valor)==0 && s.siguiente != cab1){
-                r = new Perros_Calientes("Sofia reina", "mexicana",63.0 ,5.2 ,31, "infanterioril");
+                r = new Perros_Calientes("Sofia reina", "mexicana",63.0 ,5.2 ,31, "adulto");
                 r.siguiente = s.siguiente;
                 s.siguiente = r;
 
@@ -883,7 +1201,7 @@ public class Main {
         System.out.println("\nMENU ELIMINAR LISTAS CIRCULARES");
         System.out.println("1. Eliminar por el inicio listas circulares.");
         System.out.println("2. Eliminar por el fin listas circulares.");
-        System.out.println("3. Eliminar anteriores de nodo listas circulares");
+        System.out.println("3. Eliminar antes de nodo listas circulares");
         System.out.println("4. Eliminar despues de nodo listas circulares");
         System.out.println("5. Eliminar nodo dado listas circulares.");
         System.out.println("6. Volver.");
@@ -1043,7 +1361,7 @@ public class Main {
         System.out.println("Digite el nombre del perro caliente a modificar: ");
         dato=leer.nextLine();
 
-        Perros_Calientes r = cab1;
+        r = cab1;
         boolean encontrado = false;
 
         do {
@@ -1160,7 +1478,8 @@ public class Main {
         System.out.println("3. Eliminar listas Dobles");
         System.out.println("4. Modificar listas Dobles");
         System.out.println("5. Imprimir listas Dobles");
-        System.out.println("6. Volver.");
+        System.out.println("6. Reportes listas dobles");
+        System.out.println("7. Volver.");
 
         System.out.println("");
         System.out.println("Escoja una opcion");
@@ -1191,8 +1510,10 @@ public class Main {
                 imprimirListasDobles();
                 menuListasDobles();
                 break;
-
             case 6:
+                menuReportesListasDobles();
+                menuListasDobles();
+            case 7:
                 menuPrincipal();
                 break;
 
@@ -1203,21 +1524,138 @@ public class Main {
 
     public void crearListasDobles()
     {
-        t = new Paginas_Amarillas("Construcciones Beta Sas","cll 12 n° 20-14","3103332211");
+        t = new Paginas_Amarillas("Construcciones Beta Sas","calle 12 n° 20-14","3103332211");
         cab2=t;
         u=t;
-        t = new Paginas_Amarillas("Inversiones Electronicas","crr 21 n° 4-11","3117776655");
+
+        t = new Paginas_Amarillas("Inversiones Electronicas","calle 21 n° 4-11","3117776655");
         u.siguiente=t;
         t.anterior=u;
         u=t;
+
         t = new Paginas_Amarillas("Comercializadora Mayor Ltda","tv 34 n° 37-40","3122221817");
         u.siguiente=t;
         t.anterior=u;
         u=t;
+
+        t = new Paginas_Amarillas("Zapateria Insana","calle 44 n° 12-05","3229183377");
+        u.siguiente=t;
+        t.anterior=u;
+        u=t;
+
+        t = new Paginas_Amarillas("Adress Compani Clips","princial 64 n° 23-12","3108558916");
+        u.siguiente=t;
+        t.anterior=u;
+        u=t;
+
         t = new Paginas_Amarillas("Cacharreria Urbana","dg 72 n° 104-2","3003143218");
         u.siguiente=t;
         t.anterior=u;
         u=t;
+    }
+
+    public void menuReportesListasDobles()
+    {
+        int opc;
+
+        System.out.println("\nMENÚ REPORTES LISTAS DOBLES");
+        System.out.println("1. Mostrar empresas cuya dirección se encuentre en una calle");
+        System.out.println("2. Ordenar empresas por nombre");
+        System.out.println("3. Volver");
+
+        System.out.println("\nEscoja una opción");
+        opc = Integer.parseInt(leer.nextLine());
+
+        switch (opc){
+            case 1:
+                mostrarEmpresasDireccionEnCalle();
+                menuReportesListasDobles();
+                break;
+            case 2:
+                ordenarEmpresasPorNombre();
+                menuReportesListasDobles();
+                break;
+            case 3:
+                menuListasDobles();
+                break;
+            default:
+                menuReportesListasDobles();
+                break;
+        }
+    }
+
+    public void mostrarEmpresasDireccionEnCalle()
+    {
+        if (cab2 == null) {
+            System.out.println("La lista está vacía.");
+            return;
+        }
+
+        String palabraClave = "calle";
+        u = cab2;
+
+        System.out.println("\nEmpresas cuya dirección se encuentra en una \"calle\":");
+        while (u != null) {
+            if (u.getDireccion().toLowerCase().contains(palabraClave)) {
+                System.out.println("\nNombre: " + u.getNombre());
+                System.out.println("Dirección: " + u.getDireccion());
+                System.out.println("Teléfono: " + u.getTelefono());
+            }
+            u = u.siguiente;
+        }
+    }
+
+    public void ordenarEmpresasPorNombre() {
+
+        if (cab2 == null || cab2.siguiente == null) {
+            System.out.println("La lista está vacía o solo tiene un elemento. No es necesario ordenar.");
+            return;
+        }
+
+        Paginas_Amarillas temp;
+        boolean intercambio;
+        do {
+            intercambio = false;
+            u = cab2;
+
+            while (u.siguiente != null) {
+                if (u.getNombre().compareToIgnoreCase(u.siguiente.getNombre()) > 0) {
+                    // Intercambiar los nodos si están en el orden incorrecto
+                    temp = u;
+                    u = u.siguiente;
+                    temp.siguiente = u.siguiente;
+                    if (u.siguiente != null) {
+                        u.siguiente.setAnterior(temp);
+                    }
+
+                    u.anterior = temp.anterior;
+                    if (temp.anterior != null) {
+                        temp.anterior.setSiguiente(u);
+                    }
+
+                    u.siguiente = temp;
+                    temp.anterior = u;
+
+                    if (temp == cab2) {
+                        cab2 = u;
+                    }
+
+                    intercambio = true;
+                } else {
+                    u = u.siguiente;
+                }
+            }
+        } while (intercambio);
+
+        // Imprimir empresas ordenadas
+        System.out.println("\nEmpresas ordenadas por nombre:");
+        Paginas_Amarillas u = cab2;
+        while (u != null) {
+            System.out.println("\nNombre: " + u.getNombre());
+            System.out.println("Dirección: " + u.getDireccion());
+            System.out.println("Teléfono: " + u.getTelefono());
+            u = u.siguiente;
+        }
     }
 
     public void menuAdicionarListasDobles()
@@ -1226,7 +1664,7 @@ public class Main {
         System.out.println("\nMENU ADICIONAR LISTAS DOBLES");
         System.out.println("1. Adicionar por el inicio listas Dobles.");
         System.out.println("2. Adicionar por el fin listas Dobles.");
-        System.out.println("3. Adicionar anteriores de nodo listas Dobles");
+        System.out.println("3. Adicionar antes de nodo listas Dobles");
         System.out.println("4. Adicionar despues de nodo listas Dobles");
         System.out.println("5. Volver.");
 
@@ -1355,9 +1793,9 @@ public class Main {
         System.out.println("Digite el nombre de la empresa a buscar ");
         dato = leer.nextLine();
 
-        Paginas_Amarillas t = new Paginas_Amarillas("", "", ""); // Crear una instancia para llenar los datos
+        t = new Paginas_Amarillas("", "", ""); // Crear una instancia para llenar los datos
 
-        Paginas_Amarillas u = cab2;
+        u = cab2;
         while (u != null && !u.getNombre().equalsIgnoreCase(dato)) {
             u = u.siguiente;
         }
@@ -1388,7 +1826,7 @@ public class Main {
         System.out.println("\nMENU ELIMINAR LISTAS DOBLES");
         System.out.println("1. Eliminar por el inicio listas Dobles.");
         System.out.println("2. Eliminar por el fin listas Dobles.");
-        System.out.println("3. Eliminar anteriores de nodo listas Dobles");
+        System.out.println("3. Eliminar antes de nodo listas Dobles");
         System.out.println("4. Eliminar despues de nodo listas Dobles");
         System.out.println("5. Eliminar nodo dado listas Dobles.");
         System.out.println("6. Volver.");
@@ -1408,7 +1846,7 @@ public class Main {
                 break;
 
             case 3:
-                eliminarAnteriorListasDobles();
+                eliminarAntesListasDobles();
                 menuEliminarListasDobles();
                 break;
 
@@ -1449,73 +1887,52 @@ public class Main {
         t.anterior.siguiente=null;
     }
 
-    public void eliminarAnteriorListasDobles()// no funciona
+    public void eliminarAntesListasDobles()
     {
-        if (cab2 == null || cab2.siguiente == null) {
-            System.out.println("No hay suficientes nodos para eliminar antes de un nodo.");
-            return;
-        }
-
         String dato;
-        System.out.println("Digite el nombre de la empresa cuyo nodo anterior desea eliminar:");
+        boolean encontrado = false;
+
+        System.out.println("Ingrese el nombre a buscar para eliminar su anterior: ");
         dato = leer.nextLine();
+        u = cab2;
 
-        if (cab2.siguiente.getNombre().equalsIgnoreCase(dato)) {
-            Paginas_Amarillas nodoEliminar = cab2.siguiente;
-            cab2.siguiente = nodoEliminar.siguiente; // Si el nodo a eliminar es el segundo nodo
-            if (cab2.siguiente != null) {
-                cab2.siguiente.anterior = cab2;
-            }
+        if (cab2 == null) {
+            System.out.println("La lista está vacía.");
             return;
         }
 
-        Paginas_Amarillas u = cab2.siguiente;
-        while (u.siguiente != null && !u.siguiente.getNombre().equalsIgnoreCase(dato)) {
-            u = u.siguiente;
-        }
-
-        if (u.siguiente != null) {
-            Paginas_Amarillas nodoEliminar = u.siguiente;
-            u.siguiente = nodoEliminar.siguiente;
-            if (nodoEliminar.siguiente != null) {
-                nodoEliminar.siguiente.anterior = u;
-            }
+        if (cab2.getNombre().compareToIgnoreCase(dato) == 0) {
+            System.out.println("No existe nodo anterior a eliminar.");
+            return;
+        } else if (cab2.getSiguiente() == null) {
+            System.out.println("La lista solo contiene un elemento.");
+            return;
+        } else if (cab2.getSiguiente().getNombre().compareToIgnoreCase(dato) == 0) {
+            cab2 = cab2.getSiguiente();
+            cab2.setAnterior(null);
+            System.out.println("Se ha eliminado el nodo correctamente.");
+            return;
         } else {
-            System.out.println("El nodo anterior al nombre proporcionado no se encuentra en la lista.");
-        }
-
-        /*if (cab2 == null || cab2.siguiente == null) {
-            System.out.println("No hay suficientes nodos para eliminar antes de un nodo.");
-            return;
-        }
-
-        String dato;
-        System.out.println("Digite el nombre de la empresa cuyo nodo anterior desea eliminar:");
-        dato = leer.nextLine();
-
-        if (cab2.siguiente.getNombre().equalsIgnoreCase(dato)) {
-            cab2 = cab2.siguiente; // Si el nodo a eliminar es el segundo nodo
-            cab2.anterior = null;
-            return;
-        }
-
-        Paginas_Amarillas u = cab2.siguiente;
-        while (u.siguiente != null && !u.siguiente.getNombre().equalsIgnoreCase(dato)) {
-            u = u.siguiente;
-        }
-
-        if (u.siguiente != null) {
-            Paginas_Amarillas t = u.siguiente;
-            if (t.siguiente != null) {
-                u.siguiente = t.siguiente;
-                t.siguiente.anterior = u;
-            } else {
-                u.siguiente = null; // Si el nodo a eliminar es el último nodo
+            while (u != null) {
+                if (u.getSiguiente() != null && u.getSiguiente().getSiguiente() != null &&
+                        u.getSiguiente().getSiguiente().getNombre().compareToIgnoreCase(dato) == 0) {
+                    u.anterior = u.getSiguiente();
+                    u.siguiente = u.getSiguiente().getSiguiente();
+                    u.anterior.setSiguiente(u.siguiente);
+                    if (u.siguiente != null) {
+                        u.siguiente.setAnterior(u.anterior);
+                    }
+                    encontrado = true;
+                    System.out.println("Se eliminó el nodo correctamente.");
+                    break;
+                }
+                u = u.getSiguiente();
             }
-        } else {
-            System.out.println("El nodo anterior al nombre proporcionado no se encuentra en la lista.");
-        }*/
+        }
 
+        if (!encontrado) {
+            System.out.println("El artista con el nombre ingresado no existe en la lista.");
+        }
     }
 
     public void eliminarDespuesListasDobles()
@@ -1526,7 +1943,7 @@ public class Main {
         }
 
         String dato;
-        System.out.println("Digite el nombre de la empresa cuyo nodo siguiente desea eliminar:");
+        System.out.println("Digite el nombre de la empresa para eliminar su siguiente:");
         dato = leer.nextLine();
 
         u = cab2;
@@ -1607,7 +2024,7 @@ public class Main {
             System.out.println("3. Cambiar el Teléfono");
             System.out.println("4. Cambiar todos los datos");
 
-            System.out.println("Escoja una opción");
+            System.out.println("Escoja una opción:");
             opc = Integer.parseInt(leer.nextLine());
 
             switch (opc) {
@@ -1655,9 +2072,9 @@ public class Main {
         t=cab2;
         while (t.siguiente!=null)
         {
-            System.out.println("\nNombre:"+ t.getNombre());
-            System.out.println("Dirección:"+ t.getDireccion());
-            System.out.println("Telefono:"+ t.getTelefono());
+            System.out.println("\nNombre: "+ t.getNombre());
+            System.out.println("Dirección: "+ t.getDireccion());
+            System.out.println("Telefono: "+ t.getTelefono());
             t=t.siguiente;
 
         }
@@ -1691,10 +2108,10 @@ public class Main {
         System.out.println("3. Eliminar listas Circulares Dobles");
         System.out.println("4. Modificar listas Circulares Dobles");
         System.out.println("5. Imprimir listas Circulares Dobles");
-        System.out.println("6. Volver.");
+        System.out.println("6. Reportes listas circulares dobles");
+        System.out.println("7. Volver.");
 
-        System.out.println("");
-        System.out.println("Escoja una opcion");
+        System.out.println("\nEscoja una opcion:");
         opc =Integer.parseInt(leer.nextLine());
 
         switch (opc) {
@@ -1722,8 +2139,11 @@ public class Main {
                 imprimirListasCircularesDobles();
                 menuListasCircularesDobles();
                 break;
-
             case 6:
+                menuReportesListasCircularesDobles();
+                menuListasCircularesDobles();
+                break;
+            case 7:
                 menuPrincipal();
                 break;
 
@@ -1792,7 +2212,7 @@ public class Main {
             System.out.println("3. Cambiar el código de la asignatura");
             System.out.println("4. Cambiar todos los datos");
 
-            System.out.println("Escoja una opción");
+            System.out.println("Escoja una opción:");
             opc = Integer.parseInt(leer.nextLine());
 
             switch (opc) {
@@ -1847,13 +2267,86 @@ public class Main {
         System.out.println("Nota: "+ x.getNota());
     }
 
+    public void menuReportesListasCircularesDobles()
+    {
+        int opc;
+
+        System.out.println("\nMENÚ REPORTES LISTAS CIRCULARES DOBLES");
+        System.out.println("1. Calcular promedio del curso");
+        System.out.println("2. Asignaturas con una nota superior al promedio");
+        System.out.println("3. Volver");
+
+        System.out.println("\nEscoja una opción");
+        opc = Integer.parseInt(leer.nextLine());
+
+        switch (opc){
+            case 1:
+                calcularPromedioCurso();
+                menuReportesListasCircularesDobles();
+                break;
+            case 2:
+                numeroDeEstudiantesConNotaSuperiorAlPromedio();
+                menuReportesListasCircularesDobles();
+                break;
+            case 3:
+                menuListasCircularesDobles();
+                break;
+            default:
+                menuReportesListasCircularesDobles();
+                break;
+        }
+    }
+
+    public double calcularPromedioCurso()
+    {
+        if (cab3 == null) {
+            System.out.println("La lista está vacía.");
+            return 0.0;
+        }
+
+        x = cab3;
+        double sumaCalificaciones = 0.0;
+        int cantidadCursos = 0;
+
+        do {
+            sumaCalificaciones += x.getNota();
+            cantidadCursos++;
+            x = x.getSiguiente();
+        } while (x != cab3);
+
+        double promedio = sumaCalificaciones / cantidadCursos;
+        System.out.println("El promedio del curso es de: " + promedio);
+        return promedio;
+    }
+
+    public void numeroDeEstudiantesConNotaSuperiorAlPromedio()
+    {
+        double promedio = calcularPromedioCurso();
+        if (cab3 == null) {
+            System.out.println("La lista está vacía.");
+            return;
+        }
+
+        x = cab3;
+
+        System.out.println("\nAsignaturas con calificación superior al promedio (" + promedio + "):");
+        do {
+            if (x.getNota() > promedio) {
+                System.out.println("\nCódigo: " + x.getCodigo());
+                System.out.println("Asignarura: " + x.getAsignatura());
+                System.out.println("Nota: " + x.getNota());
+            }
+            x = x.getSiguiente();
+        } while (x != cab3);
+    }
+
     public void menuAdicionarListasCircularesDobles()
     {
         int opc;
         System.out.println("\nMENU ADICIONAR LISTAS CIRCULARES DOBLES");
         System.out.println("1. Adicionar por el inicio listas Circulares Dobles.");
         System.out.println("2. Adicionar por el fin listas Circulares Dobles.");
-        System.out.println("3. Adicionar anteriores de nodo listas Circulares Dobles");
+        System.out.println("3. Adicionar antes de nodo listas Circulares Dobles");
         System.out.println("4. Adicionar despues de nodo listas Circulares Dobles");
         System.out.println("5. Volver.");
 
@@ -1872,7 +2365,7 @@ public class Main {
                 break;
 
             case 3:
-                adicionaranterioresListasCircularesDobles();
+                adicionarAntesListasCircularesDobles();
                 menuAdicionarListasDobles();
                 break;
 
@@ -1893,19 +2386,17 @@ public class Main {
 
     public void adicionarInicioListasCiruclaresDobles()
     {
-        //codigo++;
-
         String nombre;
         int codigo;
         Double nota;
-        System.out.println("Digite el codigo del estudiante ");
-        codigo =leer.nextInt();
+        System.out.println("Digite el codigo del estudiante: ");
+        codigo = Integer.parseInt(leer.nextLine());
 
-        System.out.println("Digite nombre de la asignatura ");
-        nombre =leer.nextLine();
+        System.out.println("Digite nombre de la asignatura: ");
+        nombre = leer.nextLine();
 
-        System.out.println("Digite nota del estudiante ");
-        nota =leer.nextDouble();
+        System.out.println("Digite nota del estudiante: ");
+        nota = Double.parseDouble(leer.nextLine());
 
         y=new Curso(codigo,nombre,nota);
         x=cab3;
@@ -1921,14 +2412,14 @@ public class Main {
         String nombre;
         int codigo;
         Double nota;
-        System.out.println("Digite el codigo del estudiante ");
-        codigo =leer.nextInt();
+        System.out.println("Digite el codigo del estudiante: ");
+        codigo = Integer.parseInt(leer.nextLine());
 
-        System.out.println("Digite nombre de la asignatura ");
-        nombre =leer.nextLine();
+        System.out.println("Digite nombre de la asignatura: ");
+        nombre = leer.nextLine();
 
-        System.out.println("Digite nota del estudiante ");
-        nota =leer.nextDouble();
+        System.out.println("Digite nota del estudiante: ");
+        nota = Double.parseDouble(leer.nextLine());
 
         y=new Curso(codigo, nombre, nota);
         x=cab3;
@@ -1938,14 +2429,14 @@ public class Main {
         x.anterior=y;
     }
 
-    public void adicionaranterioresListasCircularesDobles()
+    public void adicionarAntesListasCircularesDobles()
     {
-        int cod;
+        int codigo;
         String nombre;
         Double nota;
         String dato;
         x=cab3;
-        System.out.println("Digite la asignatura a buscar ");
+        System.out.println("Digite la asignatura a buscar: ");
         dato=leer.nextLine();
 
         while(x.getAsignatura().compareToIgnoreCase(dato)!=0 && x.siguiente!=cab3)
@@ -1954,16 +2445,16 @@ public class Main {
         }
         if(x==cab3)
         {
-            System.out.println("Digite el codigo del estudiante ");
-            cod=leer.nextInt();
+            System.out.println("Digite el codigo del estudiante: ");
+            codigo = Integer.parseInt(leer.nextLine());
 
-            System.out.println("Digite nombre de la asignatura ");
-            nombre =leer.nextLine();
+            System.out.println("Digite nombre de la asignatura: ");
+            nombre = leer.nextLine();
 
-            System.out.println("Digite nota del estudiante ");
-            nota =leer.nextDouble();
+            System.out.println("Digite nota del estudiante: ");
+            nota = Double.parseDouble(leer.nextLine());
 
-            y=new Curso(cod, nombre, nota);
+            y=new Curso(codigo, nombre, nota);
 
             y.siguiente=x;
             y.anterior=x.anterior;
@@ -1976,16 +2467,16 @@ public class Main {
         {
             if(x.getAsignatura().compareToIgnoreCase(dato)==0)
             {
-                System.out.println("Digite el codigo del estudiante ");
-                cod=leer.nextInt();
+                System.out.println("Digite el codigo del estudiante: ");
+                codigo = Integer.parseInt(leer.nextLine());
 
-                System.out.println("Digite nombre de la asignatura ");
-                nombre =leer.nextLine();
+                System.out.println("Digite nombre de la asignatura: ");
+                nombre = leer.nextLine();
 
-                System.out.println("Digite nota del estudiante ");
-                nota =leer.nextDouble();
+                System.out.println("Digite nota del estudiante: ");
+                nota = Double.parseDouble(leer.nextLine());
 
-                y=new Curso(cod, nombre, nota);
+                y=new Curso(codigo, nombre, nota);
                 y.siguiente=x;
                 y.anterior=x.anterior;
                 x.anterior.siguiente=y;
@@ -2005,7 +2496,7 @@ public class Main {
         String dato;
 
         x=cab3;
-        System.out.println("Digite la asignatura a buscar ");
+        System.out.println("Digite la asignatura a buscar: ");
         dato=leer.nextLine();
 
         while(x.getAsignatura().compareToIgnoreCase(dato)!=0 && x.siguiente!=cab3)
@@ -2014,13 +2505,14 @@ public class Main {
         }
         if(x.getAsignatura().compareToIgnoreCase(dato)==0 && x.siguiente==cab3)
         {
-            System.out.println("Digite el codigo del estudiante ");
-            codigo =leer.nextInt();
-            System.out.println("Digite nombre de la asignatura ");
-            nombre =leer.nextLine();
-            nombre =leer.nextLine();
-            System.out.println("Digite nota del estudiante ");
-            nota=leer.nextDouble();
+            System.out.println("Digite el codigo del estudiante: ");
+            codigo = Integer.parseInt(leer.nextLine());
+
+            System.out.println("Digite nombre de la asignatura: ");
+            nombre = leer.nextLine();
+
+            System.out.println("Digite nota del estudiante: ");
+            nota = Double.parseDouble(leer.nextLine());
 
             y=new Curso(codigo, nombre,nota);
 
@@ -2033,14 +2525,14 @@ public class Main {
         {
             if(x.getAsignatura().compareToIgnoreCase(dato)==0)
             {
-                System.out.println("Digite el codigo del estudiante ");
-                codigo =leer.nextInt();
+                System.out.println("Digite el codigo del estudiante: ");
+                codigo = Integer.parseInt(leer.nextLine());
 
-                System.out.println("Digite nombre de la asignatura ");
-                nombre =leer.nextLine();
+                System.out.println("Digite nombre de la asignatura: ");
+                nombre = leer.nextLine();
 
-                System.out.println("Digite nota del estudiante ");
-                nota=leer.nextDouble();
+                System.out.println("Digite nota del estudiante: ");
+                nota = Double.parseDouble(leer.nextLine());
 
                 y=new Curso(codigo, nombre,nota);
                 y.siguiente=x.siguiente;
@@ -2061,7 +2553,7 @@ public class Main {
         System.out.println("\nMENU ELIMINAR LISTAS CIRCULARES DOBLES");
         System.out.println("1. Eliminar por el inicio listas Circulares Dobles.");
         System.out.println("2. Eliminar por el fin listas Circulares Dobles.");
-        System.out.println("3. Eliminar anteriores de nodo listas Circulares Dobles");
+        System.out.println("3. Eliminar antes de nodo listas Circulares Dobles");
         System.out.println("4. Eliminar despues de nodo listas Circulares Dobles");
         System.out.println("5. Eliminar nodo dado listas Circulares Dobles.");
         System.out.println("6. Volver.");
@@ -2081,7 +2573,7 @@ public class Main {
                 break;
 
             case 3:
-                eliminaranterioresListasCircularesDobles();
+                eliminarAntesListasCircularesDobles();
                 menuEliminarListasCircularesDobles();
                 break;
 
@@ -2120,10 +2612,10 @@ public class Main {
         x.anterior=x.anterior.siguiente;
     }
 
-    public void eliminaranterioresListasCircularesDobles()
+    public void eliminarAntesListasCircularesDobles()
     {
         String dato;
-        System.out.println("Digite el dato a eliminar");
+        System.out.println("Digite el nombre cuyo nodo anterior desea eliminar: ");
         dato=leer.nextLine();
 
         x=cab3;
@@ -2152,7 +2644,7 @@ public class Main {
                 x.anterior=x.anterior.anterior;
             }else
             {
-                System.out.println("El dato no se encuentra");
+                System.out.println("El nodo no se encuentra");
             }
         }
     }
@@ -2160,7 +2652,7 @@ public class Main {
     public void eliminarDespuesListasCircularesDobles()
     {
         String dato;
-        System.out.println("Digite el dato a eliminar");
+        System.out.println("Digite nombre cuyo nodo siguiente desea eliminar: ");
         dato=leer.nextLine();
 
         x=cab3;
@@ -2183,14 +2675,14 @@ public class Main {
             x.siguiente.anterior=x;
         }else
         {
-            System.out.println("El dato no se encuentra");
+            System.out.println("El nodo no se encuentra");
         }
     }
 
     public void eliminarNodoDadoListasCircularesDobles()
     {
         String dato;
-        System.out.println("Digite el dato a eliminar");
+        System.out.println("Digite el nombre del nodo a eliminar");
         dato=leer.nextLine();
 
         x=cab3;
@@ -2212,7 +2704,7 @@ public class Main {
             x.anterior.siguiente=x.siguiente;
             x.siguiente.anterior=x.anterior;
         }else if (dato.compareToIgnoreCase(x.getAsignatura())!=0 && x.siguiente!=cab3)
-            System.out.println("El dato no existe");
+            System.out.println("El nodo no existe");
     }
 
     public static void main(String[] args)

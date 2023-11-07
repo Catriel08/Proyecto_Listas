@@ -53,11 +53,8 @@ public class Artista {
 
     @Override
     public String toString() {
-        return "Artista{" +
-                "nombre='" + nombre + '\'' +
-                ", nacionalidad='" + nacionalidad + '\'' +
-                ", edad='" + edad + '\'' +
-                ", sig=" + sig +
-                '}';
+        return "\nnombre: " + nombre +
+                "\nnacionalidad: " + nacionalidad +
+                "\nedad: " + edad;
     }
 }
