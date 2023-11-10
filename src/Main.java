@@ -1067,7 +1067,7 @@ public class Main {
                 break;
 
             case 3:
-                adicionaranterioresListasCirculares();
+                adicionarAnteriorListasCirculares();
                 menuAdicionarListasCirculares();
                 break;
 
@@ -1111,7 +1111,7 @@ public class Main {
         System.out.println("Se ha añadido correctamente un participante");
     }
 
-    public void adicionaranterioresListasCirculares()
+    public void adicionarAnteriorListasCirculares()
     {
         Perros_Calientes opc;
         String valor;
@@ -1128,6 +1128,8 @@ public class Main {
                 s=s.siguiente;
             s.siguiente=r;
             cab1=r;
+
+            System.out.println("\nParticipante agregado correctamente");
         }
         else
         {
@@ -1142,6 +1144,8 @@ public class Main {
             {
                 r.siguiente = s;
                 opc.siguiente = r;
+
+                System.out.println("\nParticipante agregado correctamente");
             }
             else{
                 System.out.println("El participanteriore no se encuentra en la lista");
@@ -1150,6 +1154,7 @@ public class Main {
 
     }
     public void adicionarDespuesListasCirculares(){
+
         String valor;
         System.out.println("Digite el nombre a buscar");
         valor = leer.nextLine();
@@ -1175,9 +1180,6 @@ public class Main {
                 System.out.println("El participanteriore no se encuentra en la lista");
             }
         }
-
-
-
     }
     public void menuEliminarListasCirculares(){
         int opc;
@@ -1204,7 +1206,7 @@ public class Main {
                 break;
 
             case 3:
-                eliminaranterioresListasCirculares();
+                eliminarAnteriorListasCirculares();
                 menuEliminarListasCirculares();
                 break;
 
@@ -1246,7 +1248,7 @@ public class Main {
         s.siguiente = cab1;
     }
 
-    public void eliminaranterioresListasCirculares()
+    public void eliminarAnteriorListasCirculares()
     {
         String dato;
         System.out.println("Digite el dato a eliminar");
@@ -1666,7 +1668,7 @@ public class Main {
                 break;
 
             case 3:
-                adicionarAnterioresListasDobles();
+                adicionarAnteriorListasDobles();
                 menuAdicionarListasDobles();
                 break;
 
@@ -1722,7 +1724,7 @@ public class Main {
         u.siguiente=t;
     }
 
-    public void adicionarAnterioresListasDobles()
+    public void adicionarAnteriorListasDobles()
     {
         String nombre, direccion, telefono;
         String dato;
