@@ -10,7 +10,6 @@ public class Main {
     Paginas_Amarillas cab2,t,u;
     Curso cab3,x,y;
     int opc;
-    //int codigo=0;
     int numeroArtistas=0;
     File cargar = new File("C:\\Users\\Brayan\\IdeaProjects\\Proyecto_Listas\\Txt_Artista\\Artista.txt");
     public Main()
@@ -146,21 +145,6 @@ public class Main {
         q = new Artista("Dylan","colombiano",75);
         p.sig=q;
         p=q;
-
-        /*try (PrintWriter writer = new PrintWriter(cargar)) {
-            p = cab;
-
-            while (p != null) {
-                writer.println( p.getNombre());
-                writer.println(p.getNacionalidad());
-                writer.println(p.getEdad());
-                p = p.sig;
-            }
-
-            System.out.println("Lista de artistas guardada en el archivo correctamente.");
-        } catch (IOException e) {
-            System.err.println("Error al escribir en el archivo: " + e.getMessage());
-        }*/
     }
 
     public void imprimirArtistasImpares()
@@ -186,7 +170,6 @@ public class Main {
                 break;
             }
         }
-
     }
 
     public void cargarArtistasTxt() {
@@ -299,7 +282,7 @@ public class Main {
         p = cab;
 
         System.out.println("Ingrese la letra por la cual desea buscar los nombres");
-        caracterAlfabetico = leer.nextLine().toUpperCase(); // Convertir a mayúsculas para hacer la comparación insensible a mayúsculas/minúsculas
+        caracterAlfabetico = leer.nextLine().toUpperCase(); // Convertir a mayúsculas para hacer la comparación de mayúsculas/minúsculas
 
         while (p != null) {
             if (Character.toUpperCase(caracterAlfabetico.charAt(0)) == Character.toUpperCase(p.getNombre().charAt(0))) {

@@ -53,8 +53,8 @@ public class Artista {
 
     @Override
     public String toString() {
-        return "\nnombre: " + nombre +
-                "\nnacionalidad: " + nacionalidad +
-                "\nedad: " + edad;
+        return "\nNombre: " + nombre +
+                "\nNacionalidad: " + nacionalidad +
+                "\nEdad: " + edad;
     }
 }
